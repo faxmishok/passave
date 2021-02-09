@@ -5,15 +5,14 @@ const User = require("../models/user");
 const Save = require("../models/save");
 
 //@desc User's dashboard view / DB
-//@route GET /profile/user/dashboard
+//@route GET /profile/dashboard
 //@access PRIVATE: 'USER'
-
 exports.getUserDB = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ _id: req.user.userId })
     .select("saves first_name last_name username email")
     .populate({
       path: "saves",
-      select: "name email password",
+      select: "name username email password loginURL",
     });
 
   if (!user) {
@@ -29,7 +28,7 @@ exports.getUserDB = asyncHandler(async (req, res, next) => {
 });
 
 //@desc User's dashboard edit
-//@route PUT /profile/user/dashboard
+//@route PUT /profile/dashboard
 //@access PRIVATE: 'USER'
 exports.updateUserDB = asyncHandler(async (req, res, next) => {
   const update = ({
@@ -56,21 +55,56 @@ exports.updateUserDB = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const isMatch = hacker.isMatchedPassword(oldPassword);
+  const isMatch = user.isMatchedPassword(oldPassword);
   if (!isMatch) {
     return next(new ErrorResponse("Password is incorrect", 403));
   }
 
-  const updatedUser = await (
-    await User.findOneAndUpdate({ _id: req.user.userId }, update, {
+  if (newPassword && newPasswordConfirmation) {
+    update.password = newPassword;
+  }
+
+  const updatedUser = await User.findOneAndUpdate(
+    { _id: req.user.userId },
+    update,
+    {
       new: true,
       runValidators: true,
-    })
-  ).isSelected("saves first_name last_name username email");
+    }
+  ).select("saves first_name last_name username email");
 
   return res.status(200).json({
     success: true,
     message: "Profile updated successfully!",
     updatedUser,
+  });
+});
+
+//@desc Add new save
+//@route POST /profile/saves/add
+//@access PRIVATE: 'USER'
+exports.createSave = asyncHandler(async (req, res, next) => {
+  const userId = req.user.userId;
+
+  let { name, username, email, password, loginURL } = req.body;
+
+  const save = new Save({
+    name,
+    username,
+    email,
+    password,
+    loginURL,
+    user: userId,
+  });
+
+  await save.save();
+
+  user.saves.push(save);
+  await user.save();
+
+  return res.status(201).json({
+    success: true,
+    message: `Bounty created and registered to ${user.username}'s account successfully!`,
+    user,
   });
 });
