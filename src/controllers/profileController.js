@@ -6,7 +6,7 @@ const Save = require("../models/save");
 
 //@desc User's dashboard view / DB
 //@route GET /profile/dashboard
-//@access PRIVATE: 'USER'
+//@access PRIVATE: 'VERIFIED'
 exports.getUserDB = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ _id: req.user.userId })
     .select("saves first_name last_name username email")
@@ -29,7 +29,7 @@ exports.getUserDB = asyncHandler(async (req, res, next) => {
 
 //@desc User's dashboard edit
 //@route PUT /profile/dashboard
-//@access PRIVATE: 'USER'
+//@access PRIVATE: 'VERIFIED'
 exports.updateUserDB = asyncHandler(async (req, res, next) => {
   const update = ({
     first_name,
@@ -82,7 +82,7 @@ exports.updateUserDB = asyncHandler(async (req, res, next) => {
 
 //@desc Add new save
 //@route POST /profile/saves/add
-//@access PRIVATE: 'USER'
+//@access PRIVATE: 'VERIFIED'
 exports.createSave = asyncHandler(async (req, res, next) => {
   const userId = req.user.userId;
 
@@ -104,7 +104,61 @@ exports.createSave = asyncHandler(async (req, res, next) => {
 
   return res.status(201).json({
     success: true,
-    message: `Bounty created and registered to ${user.username}'s account successfully!`,
+    message: `Save created and registered to ${user.username}'s account successfully!`,
     user,
+  });
+});
+
+//@desc Update Save with Id
+//@route PUT /profile/saves/:id
+//@access PRIVATE: 'VERIFIED'
+exports.updateSave = asyncHandler(async (req, res, next) => {
+  const update = ({ name, username, email, password, loginURL } = req.body);
+
+  const userId = req.user.userId;
+  const saveId = req.params.id;
+
+  const user = await User.findById(userId)
+    .select("saves")
+    .populate({ path: "saves", match: { _id: saveId } });
+
+  const save = await Save.findOneAndUpdate({ _id: req.params.id }, update, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!save) {
+    return next(new ErrorResponse("Save does not exist!", 404));
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "Save Updated Successfully!",
+    user,
+  });
+});
+
+//@desc   Delete Save with Id
+//@route  DELETE /profile/saves/:id
+//@access PRIVATE : 'VERIFIED'
+exports.deleteSave = asyncHandler(async (req, res, next) => {
+  const userId = req.user.userId;
+  const saveId = req.params.id;
+
+  const user = await User.findById(userId)
+    .select("saves")
+    .populate({ path: "saves", match: { _id: saveId } });
+
+  if (user.saves.length === 0)
+    return next(new ErrorResponse("Save does not exist!", 404));
+
+  user.saves.remove(saveId);
+  await user.save();
+
+  await Save.findByIdAndDelete(saveId);
+
+  return res.status(200).json({
+    success: true,
+    message: "Save Deleted Successfully!",
   });
 });
