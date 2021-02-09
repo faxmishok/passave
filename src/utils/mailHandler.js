@@ -20,7 +20,7 @@ exports.sendMail = ({ mailTo, mailType, options }) => {
 
 const setOptions = (mailTo, mailType, options) => {
   const result = {
-    from: `"Example" ${process.env.EMAIL}`,
+    from: `Passave ${process.env.EMAIL}`,
     to: mailTo,
   };
 
@@ -28,8 +28,19 @@ const setOptions = (mailTo, mailType, options) => {
     case "REGISTRATION":
       result.subject = `Welcome ${options.username}!`;
       result.html = `
-        Welcome to my site
-        `;
+        <h3>You have succesfully created your account.</h3></br>
+        <p>Dear User,</p>
+        <p>Please <a href='${process.env.WEBSITE_URL}/auth/verify/${options.token}'>click</a> to activate your account.</p>
+      `;
+      break;
+
+    case "USER_PASSWORD_RESET":
+      result.subject = `Reset Password`;
+      result.html = `
+              <h3>You have requested a reset of your password.</h3></br>
+              <p>Dear <i>${options.username}</i>,</p>
+              <p>Copy this token and paste into your application! <b>${options.token}</b></p>
+            `;
       break;
   }
 

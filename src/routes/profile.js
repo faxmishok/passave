@@ -5,7 +5,7 @@ const { protect } = require("../middleware/protect");
 
 const { getUserDB, updateUserDB } = require("../controllers/profileController");
 
-router.get("/hacker/dashboard", protect(PERMISSIONS.ONLY_USERS), getUserDB);
-router.put("/hacker/dashboard", protect(PERMISSIONS.ONLY_USERS), updateUserDB);
+router.get("/dashboard", protect(PERMISSIONS.ONLY_USERS), getUserDB);
+router.put("/dashboard", protect(PERMISSIONS.ONLY_USERS), updateUserDB);
 
 module.exports = router;

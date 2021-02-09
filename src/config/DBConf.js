@@ -6,6 +6,7 @@ const dbConf = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
+      useFindAndModify: false,
     })
     .then(() => console.log(`MongoDB connected: ${mongoose.connection.host}`))
     .catch((err) => {
