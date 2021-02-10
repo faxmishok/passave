@@ -88,6 +88,12 @@ exports.createSave = asyncHandler(async (req, res, next) => {
 
   let { name, username, email, password, loginURL } = req.body;
 
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return next(new ErrorResponse("Something went wrong.", 404));
+  }
+
   const save = new Save({
     name,
     username,
@@ -105,7 +111,8 @@ exports.createSave = asyncHandler(async (req, res, next) => {
   return res.status(201).json({
     success: true,
     message: `Save created and registered to ${user.username}'s account successfully!`,
-    user,
+    //TODO error
+    // user.,
   });
 });
 
@@ -134,7 +141,7 @@ exports.updateSave = asyncHandler(async (req, res, next) => {
   return res.status(200).json({
     success: true,
     message: "Save Updated Successfully!",
-    user,
+    save,
   });
 });
 
