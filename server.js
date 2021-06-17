@@ -6,6 +6,7 @@ const errorHandler = require('./src/middleware/errorHandler');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { sendMail } = require('./src/utils/mailHandler');
+const path = require('path');
 
 // Set env variables
 require('dotenv').config();
@@ -26,6 +27,34 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 
 // Set all routes
 routeConf(express, app);
+
+//Serve public folder statically
+app.use('/static', express.static(path.join(__dirname, 'public')));
+
+// Set view engine to ejs
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Set views for routes
+app.get('/', (req, res, next) => {
+  res.render('index.ejs', { title: 'Passave | Password Manager' });
+});
+
+app.get('/sign-in', (req, res, next) => {
+  res.render('sign-in.ejs', { title: 'Passave | Sign In' });
+});
+
+app.get('/sign-up', (req, res, next) => {
+  res.render('sign-up.ejs', { title: 'Passave | Sign Up' });
+});
+
+app.get('/faq', (req, res, next) => {
+  res.render('faq.ejs', { title: 'Passave | F.A.Q' });
+});
+
+app.get('/terms', (req, res, next) => {
+  res.render('terms.ejs', { title: 'Passave | Terms & Conditions' });
+});
 
 // Set custom error middleware
 app.use(errorHandler);

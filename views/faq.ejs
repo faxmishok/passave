@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+
+    <!------------->
+    <!-- Favicon -->
+    <!------------->
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+    <link rel="manifest" href="/static/site.webmanifest">
+    <link rel="mask-icon" href="/static/safari-pinned-tab.svg" color="#651fff">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+
+    <!------------>
+    <!-- jQuery -->
+    <!------------>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
+        </script>
+
+    <!--------->
+    <!-- CSS -->
+    <!--------->
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+    <div id="loader"></div>
+
+    <div id="content">
+
+        <!-- Navigation -->
+        <%- include('navbar.ejs') %>
+
+            <!----------------->
+            <!-- FAQ Content -->
+            <!----------------->
+            <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+                <div class="max-w-xl sm:mx-auto lg:max-w-2xl">
+                    <div class="flex flex-col mb-16 sm:text-center">
+                        <a href="/" class="mb-6 sm:mx-auto">
+                            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-indigo-50">
+                                <svg width="28.621px" height="28.621px" viewBox="0 0 28.621 28.621" fill="#651FFF">
+                                    <path d="M14.311,0c-6.904,0-12.5,5.596-12.5,12.5c0,4.723,2.618,8.828,6.48,10.955l-0.147,5.166l5.898-3.635
+                                    C14.131,24.988,14.22,25,14.311,25c6.904,0,12.5-5.596,12.5-12.5C26.811,5.596,21.215,0,14.311,0z M13.75,20.018
+                                    c-1.116,0-1.876-0.822-1.876-1.918c0-1.119,0.779-1.92,1.876-1.92c1.14,0,1.878,0.801,1.898,1.92
+                                    C15.649,19.193,14.891,20.018,13.75,20.018z M16.301,12.173c-0.779,0.865-1.096,1.686-1.074,2.638v0.377h-2.805L12.4,14.641
+                                    c-0.063-1.074,0.295-2.173,1.246-3.31c0.673-0.803,1.223-1.477,1.223-2.194c0-0.737-0.487-1.222-1.542-1.263
+                                    c-0.693,0-1.539,0.251-2.084,0.632l-0.718-2.301c0.759-0.442,2.022-0.861,3.52-0.861c2.785,0,4.048,1.538,4.048,3.289
+                                    C18.094,10.233,17.104,11.287,16.301,12.173z" />
+                                </svg>
+                            </div>
+                        </a>
+                        <div class="max-w-xl md:mx-auto sm:text-center lg:max-w-2xl">
+                            <h2
+                                class="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-gray-900 sm:text-4xl md:mx-auto">
+                                <span class="relative inline-block">
+                                    <svg viewBox="0 0 52 24" fill="currentColor"
+                                        class="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-blue-gray-100 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block">
+                                        <defs>
+                                            <pattern id="ec5d8ef5-b853-4714-b94f-df28ec98eeb7" x="0" y="0" width=".135"
+                                                height=".30">
+                                                <circle cx="1" cy="1" r=".7"></circle>
+                                            </pattern>
+                                        </defs>
+                                        <rect fill="url(#ec5d8ef5-b853-4714-b94f-df28ec98eeb7)" width="52" height="24">
+                                        </rect>
+                                    </svg>
+                                    <span class="relative">Frequently</span>
+                                </span>
+                                Asked Questions
+                            </h2>
+                            <p class="text-base text-gray-700 md:text-lg">In fact, there has not even been one person
+                                asking
+                                about this web application. I am answering few questions below in case someone might
+                                wanna
+                                ask someday.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="border rounded shadow-sm">
+                            <button id="qs-1" type="button" aria-label="Open item" title="Open item"
+                                class="flex items-center justify-between w-full p-4 focus:outline-none">
+                                <p class="text-lg font-medium">Are my passwords visible to the admin or devs?</p>
+                                <div class="flex items-center justify-center w-8 h-8 border rounded-full">
+                                    <svg viewBox="0 0 24 24"
+                                        class="w-3 text-gray-600 transition-transform duration-200">
+                                        <polyline fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-miterlimit="10" points="2,7 12,17 22,7"
+                                            stroke-linejoin="round">
+                                        </polyline>
+                                    </svg>
+                                </div>
+                            </button>
+                            <div class="p-4 pt-0">
+                                <p class="text-gray-700">They are visible to none as they are stored in hashes inside
+                                    the
+                                    database.</p>
+                            </div>
+                        </div>
+                        <div class="border rounded shadow-sm">
+                            <button id="qs-2" type="button" aria-label="Open item" title="Open item"
+                                class="flex items-center justify-between w-full p-4 focus:outline-none">
+                                <p class="text-lg font-medium">Up to how many passwords can I store?</p>
+                                <div class="flex items-center justify-center w-8 h-8 border rounded-full">
+                                    <svg viewBox="0 0 24 24"
+                                        class="w-3 text-gray-600 transition-transform duration-200">
+                                        <polyline fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-miterlimit="10" points="2,7 12,17 22,7"
+                                            stroke-linejoin="round">
+                                        </polyline>
+                                    </svg>
+                                </div>
+                            </button>
+                            <div class="p-4 pt-0">
+                                <p class="text-gray-700">Infinitely.</p>
+                            </div>
+                        </div>
+                        <div class="border rounded shadow-sm">
+                            <button id="qs-3" type="button" aria-label="Open item" title="Open item"
+                                class="flex items-center justify-between w-full p-4 focus:outline-none">
+                                <p class="text-lg font-medium">Why should we trust this web app to store our passwords?
+                                </p>
+                                <div class="flex items-center justify-center w-8 h-8 border rounded-full">
+                                    <svg viewBox="0 0 24 24"
+                                        class="w-3 text-gray-600 transition-transform duration-200">
+                                        <polyline fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-miterlimit="10" points="2,7 12,17 22,7"
+                                            stroke-linejoin="round">
+                                        </polyline>
+                                    </svg>
+                                </div>
+                            </button>
+                            <div class="p-4 pt-0">
+                                <p class="text-gray-700">It is up to you. This web app has been developed for personal
+                                    purposes but anyone willing to try is welcome.</p>
+                            </div>
+                        </div>
+                        <div class="border rounded shadow-sm">
+                            <button id="qs-4" type="button" aria-label="Open item" title="Open item"
+                                class="flex items-center justify-between w-full p-4 focus:outline-none">
+                                <p class="text-lg font-medium">Don't even ask it..</p>
+                                <div class="flex items-center justify-center w-8 h-8 border rounded-full">
+                                    <svg viewBox="0 0 24 24"
+                                        class="w-3 text-gray-600 transition-transform duration-200">
+                                        <polyline fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-miterlimit="10" points="2,7 12,17 22,7"
+                                            stroke-linejoin="round">
+                                        </polyline>
+                                    </svg>
+                                </div>
+                            </button>
+                            <div class="p-4 pt-0">
+                                <p class="text-gray-700">YES! The dropdown buttons are not working. I will fix it..
+                                    sometime.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Footer -->
+            <%- include('footer.ejs') %>
+
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            $(window).on("load", function () {
+                $('#loader').fadeOut('slow', function () {
+                    $(this).remove();
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
