@@ -1,14 +1,14 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const routeConf = require("./src/config/RouteConf");
-const dbConf = require("./src/config/DBConf");
-const errorHandler = require("./src/middleware/errorHandler");
-const cors = require("cors");
-const cookieParser = require("cookie-parser");
-const { sendMail } = require("./src/utils/mailHandler");
+const routeConf = require('./src/config/RouteConf');
+const dbConf = require('./src/config/DBConf');
+const errorHandler = require('./src/middleware/errorHandler');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const { sendMail } = require('./src/utils/mailHandler');
 
 // Set env variables
-require("dotenv").config();
+require('dotenv').config();
 
 // Middleware to parse json body and url
 app.use(express.urlencoded({ extended: false }));
@@ -31,7 +31,7 @@ routeConf(express, app);
 app.use(errorHandler);
 
 //Handle unhandled promise errors
-process.on("unhandledRejection", (err) => {
+process.on('unhandledRejection', (err) => {
   console.log(`Unhandled Error: ${err}`);
   process.exit(1);
 });
