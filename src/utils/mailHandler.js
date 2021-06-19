@@ -1,11 +1,11 @@
-const nodemailer = require("nodemailer");
+const nodemailer = require('nodemailer');
 
 exports.sendMail = ({ mailTo, mailType, options }) => {
   try {
     const mailOptions = setOptions(mailTo, mailType, options);
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      service: 'gmail',
       auth: {
         user: process.env.EMAIL,
         pass: process.env.PASSWORD,
@@ -14,7 +14,7 @@ exports.sendMail = ({ mailTo, mailType, options }) => {
     transporter.sendMail(mailOptions);
   } catch (err) {
     console.log(err);
-    throw new ErrorResponse("Error occured while sending email :(", 500);
+    throw new ErrorResponse('Error occured while sending email :(', 500);
   }
 };
 
@@ -25,7 +25,7 @@ const setOptions = (mailTo, mailType, options) => {
   };
 
   switch (mailType) {
-    case "REGISTRATION":
+    case 'REGISTRATION':
       result.subject = `Welcome ${options.username}!`;
       result.html = `
         <h3>You have succesfully created your account.</h3></br>
@@ -34,7 +34,7 @@ const setOptions = (mailTo, mailType, options) => {
       `;
       break;
 
-    case "USER_PASSWORD_RESET":
+    case 'USER_PASSWORD_RESET':
       result.subject = `Reset Password`;
       result.html = `
               <h3>You have requested a reset of your password.</h3></br>
