@@ -37,23 +37,55 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Set views for routes
 app.get('/', (req, res, next) => {
-  res.render('index.ejs', { title: 'Passave | Password Manager' });
+  if (req.cookies.token) {
+    res.redirect('/dashboard');
+  } else {
+    res.render('index', { title: 'Passave | Password Manager' });
+  }
+});
+
+app.get('/dashboard', (req, res, next) => {
+  if (!req.cookies.token) {
+    res.redirect('/sign-in');
+  } else {
+    res.render('dashboard', { title: 'Passave | Dashboard' });
+  }
 });
 
 app.get('/sign-in', (req, res, next) => {
-  res.render('sign-in.ejs', { title: 'Passave | Sign In' });
+  res.render('sign-in', { title: 'Passave | Sign In' });
 });
 
 app.get('/sign-up', (req, res, next) => {
-  res.render('sign-up.ejs', { title: 'Passave | Sign Up' });
+  res.render('sign-up', { title: 'Passave | Sign Up' });
 });
 
 app.get('/faq', (req, res, next) => {
-  res.render('faq.ejs', { title: 'Passave | F.A.Q' });
+  res.render('faq', { title: 'Passave | F.A.Q' });
 });
 
 app.get('/terms', (req, res, next) => {
-  res.render('terms.ejs', { title: 'Passave | Terms & Conditions' });
+  res.render('terms', { title: 'Passave | Terms & Conditions' });
+});
+
+app.get('/forgot', (req, res, next) => {
+  res.render('forgot', { title: 'Passave | Forgot Password?' });
+});
+
+app.get('/404', (req, res, next) => {
+  res.render('404', { title: 'Passave | 404 Error' });
+});
+
+// app.get('/postSignup', (req, res, next) => {
+//   res.render('postsignup.ejs', { title: 'Passave | Post Sign Up' });
+// });
+
+// app.get('/accountActivated', (req, res, next) => {
+//   res.render('accountActivated.ejs', { title: 'nese' });
+// });
+
+app.get('*', (req, res, next) => {
+  res.redirect('/404');
 });
 
 // Set custom error middleware

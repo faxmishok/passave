@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+
+    <!------------->
+    <!-- Favicon -->
+    <!------------->
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+    <link rel="manifest" href="/static/site.webmanifest">
+    <link rel="mask-icon" href="/static/safari-pinned-tab.svg" color="#651fff">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+
+    <!------------>
+    <!-- jQuery -->
+    <!------------>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
+        </script>
+
+    <!--------->
+    <!-- CSS -->
+    <!--------->
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+    <div id="loader"></div>
+
+    <div id="content">
+
+        <!-- Navigation -->
+        <%- include('navbar.ejs') %>
+
+
+            <!-- Verification Failed Content -->
+            <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+                <div class="max-w-xl sm:mx-auto lg:max-w-2xl">
+                    <div class="flex flex-col mb-16 sm:text-center sm:mb-0">
+                        <div class="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
+                            <h2
+                                class="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-gray-900 sm:text-4xl md:mx-auto">
+                                Verification Failed
+                            </h2>
+                            <p class="text-base text-gray-700 md:text-lg">
+                                Seems like there has been an error while using the activation link.<br />
+                                <span class="font-mono">
+                                    <%= message %>
+                                </span>
+                            </p>
+                        </div>
+                        <div>
+                            <a href="/"
+                                class="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none">
+                                Back to Homepage
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            $(window).on("load", function () {
+                $('#loader').fadeOut('slow', function () {
+                    $(this).remove();
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

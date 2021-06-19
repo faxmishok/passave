@@ -1,8 +1,8 @@
-const ErrorResponse = require("../utils/errorResponse");
-const asyncHandler = require("../middleware/async");
-const User = require("../models/user");
-const jwt = require("jsonwebtoken");
-const { sendMail } = require("../utils/mailHandler");
+const ErrorResponse = require('../utils/errorResponse');
+const asyncHandler = require('../middleware/async');
+const User = require('../models/user');
+const jwt = require('jsonwebtoken');
+const { sendMail } = require('../utils/mailHandler');
 
 //@desc   registration for User
 //@route  POST /auth/register
@@ -18,7 +18,11 @@ exports.createUser = asyncHandler(async (req, res, next) => {
   } = req.body;
 
   if (password != passwordConfirmation) {
-    next(new ErrorResponse("Passwords are not matched!", 400));
+    return res.render('sign-up', {
+      success: false,
+      title: 'Passave | Sign up',
+      message: 'Passwords are not matched!',
+    });
   }
 
   const newUser = new User({
@@ -36,13 +40,11 @@ exports.createUser = asyncHandler(async (req, res, next) => {
 
   await sendMail({
     mailTo: email,
-    mailType: "REGISTRATION",
+    mailType: 'REGISTRATION',
     options: { username, id: newUser._id, token },
   });
 
-  return res
-    .status(201)
-    .json({ success: true, message: "You successfully created a user!" });
+  return res.render('postSignup', { title: 'Passave | Post Sign-up' });
 });
 
 //@desc   Activate account
@@ -50,14 +52,24 @@ exports.createUser = asyncHandler(async (req, res, next) => {
 //@access PUBLIC
 exports.activateAccount = asyncHandler(async (req, res, next) => {
   const token = req.params.token;
-  const decoded = await jwt.verify(token, process.env.JWT_SECRET_KEY);
-  console.log(decoded);
+  var decoded;
+  await jwt.verify(token, process.env.JWT_SECRET_KEY, (err, result) => {
+    if (err) {
+      return res.render('verificationFailed', {
+        success: false,
+        title: 'Passave | Verification Failed',
+        message: err,
+      });
+    } else {
+      decoded = result;
+    }
+  });
 
-  await User.updateOne({ _id: decoded.userId }, { status: "VERIFIED" });
+  await User.updateOne({ _id: decoded.userId }, { status: 'VERIFIED' });
 
-  return res
-    .status(201)
-    .json({ success: true, message: "Account activated. You can log in now." });
+  return res.render('accountActivated', {
+    title: 'Passave | Successful Activation',
+  });
 });
 
 //@desc   login for users
@@ -66,28 +78,44 @@ exports.activateAccount = asyncHandler(async (req, res, next) => {
 exports.loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return next(new ErrorResponse("Please provide email and password!", 400));
-  }
-
-  const user = await User.findOne({ email }).select("email password status");
+  const user = await User.findOne({ email }).select(
+    'email password username status'
+  );
 
   if (!user) {
-    return next(new ErrorResponse("Provided email is not correct!", 400));
+    return res.render('sign-in', {
+      title: 'Passave | Sign in',
+      success: false,
+      message: 'Provided email is not registered.',
+    });
   }
 
-  if (user.status === "PENDING") {
-    return next(new ErrorResponse("Please verify your account!", 401));
+  if (user.status === 'PENDING') {
+    return res.render('sign-in', {
+      title: 'Passave | Sign in',
+      success: false,
+      message: 'Please verify your account!',
+    });
   }
 
   const isMatch = user.isMatchedPassword(password);
 
   if (!isMatch) {
-    return next(new ErrorResponse("Password is incorrect!", 401));
+    return res.render('sign-in', {
+      title: 'Passave | Sign in',
+      success: false,
+      message: 'Password is incorrect!',
+    });
   }
 
   const token = user.getSignedJWTToken();
-  sendTokenInCookie(token, 200, res);
+
+  return res
+    .cookie('token', token, {
+      expires: new Date(Date.now() + 3600000),
+      httpOnly: true,
+    })
+    .redirect('/dashboard');
 });
 
 //@desc   Forget password
@@ -97,11 +125,15 @@ exports.forgetPassword = asyncHandler(async (req, res, next) => {
   const { email } = req.body;
 
   const user = await User.findOne({ email }).select(
-    "username email reset_token reset_expires"
+    'username email reset_token reset_expires'
   );
 
   if (!user) {
-    return next(new ErrorResponse("User by that email does not exist!", 404));
+    return res.render('forgot', {
+      title: 'Passave | Forgot password',
+      code: 'red',
+      message: 'User by that email does not exist!',
+    });
   }
 
   user.setResetToken();
@@ -110,13 +142,14 @@ exports.forgetPassword = asyncHandler(async (req, res, next) => {
 
   sendMail({
     mailTo: user.email,
-    mailType: "USER_PASSWORD_RESET",
+    mailType: 'USER_PASSWORD_RESET',
     options: { username: user.username, token: user.reset_token },
   });
 
-  return res.status(200).json({
-    success: true,
-    message: "Reset token has been sent to your email address!",
+  return res.render('forgot', {
+    title: 'Passave | Forgot password',
+    code: 'green',
+    message: 'Reset token has been sent to your email address!',
   });
 });
 
@@ -129,16 +162,16 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   const reset_token = req.params.token;
 
   if (password !== passwordConfirmation) {
-    return next(new ErrorResponse("Passwords do not match!", 400));
+    return next(new ErrorResponse('Passwords do not match!', 400));
   }
 
   const user = await User.findOne({
     reset_token,
     reset_expires: { $gt: Date.now() },
-  }).select("reset_token reset_expires");
+  }).select('reset_token reset_expires');
 
   if (!user) {
-    return next(new ErrorResponse("Token is invalid or has expired!", 401));
+    return next(new ErrorResponse('Token is invalid or has expired!', 401));
   }
 
   user.password = password;
@@ -149,7 +182,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 
   return res.status(200).json({
     success: true,
-    message: "Your password has been changed!",
+    message: 'Your password has been changed!',
   });
 });
 
@@ -160,47 +193,32 @@ exports.postEmailResend = asyncHandler(async (req, res, next) => {
   try {
     const { email } = req.body;
 
-    const user = await User.findOne({ email, status: "PENDING" }).select(
-      "username"
+    const user = await User.findOne({ email, status: 'PENDING' }).select(
+      'username'
     );
 
     if (!user) {
-      return next(new ErrorResponse(""));
+      return next(new ErrorResponse(''));
     }
     const options = { username: user.username, id: user._id };
 
-    options["token"] = user.getSignedJWTToken();
+    options['token'] = user.getSignedJWTToken();
     sendMail({
       mailTo: email,
       mailType,
       options,
     });
   } catch (err) {}
-  return res.status(200).json({ success: true, message: "Email sent!" });
+  return res.status(200).json({ success: true, message: 'Email sent!' });
 });
 
 //@desc   Sign out route
 //@route  POST /auth/signout
 //@access PUBLIC
 exports.postSignOut = asyncHandler(async (req, res, next) => {
-  res
-    .clearCookie("token")
-    .status(200)
-    .json({ success: true, message: "Signed out successfully!" });
-});
-
-// Sent token in cookie
-const sendTokenInCookie = (token, statusCode, res, optional) => {
-  const options = {
-    expires: new Date(Date.now() + 3600000),
-    httpOnly: true,
-  };
-
-  const response = {
+  res.clearCookie('token').render('sign-in', {
     success: true,
-    message: "Logged in!",
-    optional,
-  };
-
-  return res.status(statusCode).cookie("token", token, options).json(response);
-};
+    title: 'Passave | Sign in',
+    message: 'Signed out successfully!',
+  });
+});
