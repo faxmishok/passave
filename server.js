@@ -52,12 +52,24 @@ app.get('/dashboard', (req, res, next) => {
   }
 });
 
+app.get('/preres', (req, res, next) => {
+  res.render('preReset', { title: 'Ebe' });
+});
+
 app.get('/sign-in', (req, res, next) => {
-  res.render('sign-in', { title: 'Passave | Sign In' });
+  if (req.cookies.token) {
+    res.redirect('/dashboard');
+  } else {
+    res.render('sign-in', { title: 'Passave | Sign In' });
+  }
 });
 
 app.get('/sign-up', (req, res, next) => {
-  res.render('sign-up', { title: 'Passave | Sign Up' });
+  if (req.cookies.token) {
+    res.redirect('/dashboard');
+  } else {
+    res.render('sign-up', { title: 'Passave | Sign Up' });
+  }
 });
 
 app.get('/faq', (req, res, next) => {
@@ -69,7 +81,11 @@ app.get('/terms', (req, res, next) => {
 });
 
 app.get('/forgot', (req, res, next) => {
-  res.render('forgot', { title: 'Passave | Forgot Password?' });
+  if (req.cookies.token) {
+    res.redirect('/dashboard');
+  } else {
+    res.render('forgot', { title: 'Passave | Forgot Password?' });
+  }
 });
 
 app.get('/404', (req, res, next) => {

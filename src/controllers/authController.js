@@ -34,17 +34,31 @@ exports.createUser = asyncHandler(async (req, res, next) => {
     email,
   });
 
-  await newUser.save();
+  var successFlag;
+  await newUser
+    .save()
+    .then(() => {
+      successFlag = true;
+    })
+    .catch((err) => {
+      return res.render('sign-up', {
+        success: false,
+        title: 'Passave | Sign up',
+        message: err,
+      });
+    });
 
-  const token = newUser.getSignedJWTToken();
+  if (successFlag) {
+    const token = newUser.getSignedJWTToken();
 
-  await sendMail({
-    mailTo: email,
-    mailType: 'REGISTRATION',
-    options: { username, id: newUser._id, token },
-  });
+    await sendMail({
+      mailTo: email,
+      mailType: 'REGISTRATION',
+      options: { username, id: newUser._id, token },
+    });
 
-  return res.render('postSignup', { title: 'Passave | Post Sign-up' });
+    return await res.render('postSignup', { title: 'Passave | Post Sign-up' });
+  }
 });
 
 //@desc   Activate account
@@ -85,7 +99,7 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
   if (!user) {
     return res.render('sign-in', {
       title: 'Passave | Sign in',
-      success: false,
+      code: 'red',
       message: 'Provided email is not registered.',
     });
   }
@@ -93,7 +107,7 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
   if (user.status === 'PENDING') {
     return res.render('sign-in', {
       title: 'Passave | Sign in',
-      success: false,
+      code: 'red',
       message: 'Please verify your account!',
     });
   }
@@ -103,7 +117,7 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
   if (!isMatch) {
     return res.render('sign-in', {
       title: 'Passave | Sign in',
-      success: false,
+      code: 'red',
       message: 'Password is incorrect!',
     });
   }
@@ -146,8 +160,8 @@ exports.forgetPassword = asyncHandler(async (req, res, next) => {
     options: { username: user.username, token: user.reset_token },
   });
 
-  return res.render('forgot', {
-    title: 'Passave | Forgot password',
+  return res.render('preReset', {
+    title: 'Passave | Pre-reset',
     code: 'green',
     message: 'Reset token has been sent to your email address!',
   });
@@ -162,7 +176,11 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   const reset_token = req.params.token;
 
   if (password !== passwordConfirmation) {
-    return next(new ErrorResponse('Passwords do not match!', 400));
+    res.render('reset', {
+      title: 'Passave | Reset Password',
+      code: 'red',
+      message: 'Passwords do not match!',
+    });
   }
 
   const user = await User.findOne({
@@ -171,19 +189,34 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   }).select('reset_token reset_expires');
 
   if (!user) {
-    return next(new ErrorResponse('Token is invalid or has expired!', 401));
+    res.render('reset', {
+      title: 'Passave | Reset Password',
+      code: 'red',
+      message: 'Token is invalid or has expired!',
+    });
   }
 
   user.password = password;
   user.reset_token = null;
   user.reset_expires = null;
 
-  await user.save();
-
-  return res.status(200).json({
-    success: true,
-    message: 'Your password has been changed!',
-  });
+  await user
+    .save()
+    .then(() => {
+      res.render('sign-in', {
+        title: 'Passave | Sign in',
+        code: 'green',
+        message: 'Your password has been successfully reset!',
+      });
+    })
+    .catch((err) => {
+      res.render('reset', {
+        title: 'Passave | Reset Password',
+        code: 'red',
+        message:
+          'There has been an internal server error. Please try a bit later.',
+      });
+    });
 });
 
 //@desc   Email resend route
@@ -217,8 +250,8 @@ exports.postEmailResend = asyncHandler(async (req, res, next) => {
 //@access PUBLIC
 exports.postSignOut = asyncHandler(async (req, res, next) => {
   res.clearCookie('token').render('sign-in', {
-    success: true,
     title: 'Passave | Sign in',
+    code: 'green',
     message: 'Signed out successfully!',
   });
 });
