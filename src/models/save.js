@@ -21,7 +21,6 @@ const saveSchema = mongoose.Schema({
   },
   loginURL: {
     type: String,
-    required: [true, 'URL Link is required!'],
     unique: true,
   },
   additional: {
