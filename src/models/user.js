@@ -65,10 +65,10 @@ const userSchema = mongoose.Schema({
   },
 });
 
-userSchema.pre('save', function (next) {
+userSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(this.password, salt);
+    const salt = await bcrypt.genSaltSync(10);
+    const hashedPassword = await bcrypt.hashSync(this.password, salt);
     this.password = hashedPassword;
   }
   next();
