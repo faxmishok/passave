@@ -31,6 +31,14 @@
     <!-- CSS -->
     <!--------->
     <link rel="stylesheet" href="/static/styles.css">
+
+    <!------------------->
+    <!-- Google OAuth2 -->
+    <!------------------->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id"
+        content="831815436231-83tbapi97dqnuijmb47324lm9dhk3nud.apps.googleusercontent.com">
+
 </head>
 
 <body>
@@ -50,7 +58,7 @@
                         <div class="flex items-center justify-between flex-wrap">
                             <div class="w-0 flex-1 flex items-center justify-center">
                                 <p class="ml-3 font-medium text-white truncate">
-                                    <span class="hidden md:inline">
+                                    <span class="md:inline">
                                         <%= message %>
                                     </span>
                                 </p>
@@ -81,7 +89,7 @@
                             <div class="flex items-center justify-between flex-wrap">
                                 <div class="w-0 flex-1 flex items-center justify-center">
                                     <p class="ml-3 font-medium text-white truncate">
-                                        <span class="hidden md:inline">
+                                        <span class="md:inline">
                                             <%= message %>
                                         </span>
                                     </p>
@@ -110,7 +118,7 @@
 
                         <div class="overflow-hidden">
                             <div
-                                class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+                                class="px-4 py-12 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-12">
                                 <div class="flex flex-col items-center justify-center xl:flex-row">
                                     <div class="w-full max-w-xl xl:px-8 xl:w-5/12">
                                         <div class="relative">
@@ -159,6 +167,15 @@
                                                             Sign in
                                                         </button>
                                                     </div>
+                                                    <div class="flex items-center w-full mb-4">
+                                                        <hr class="flex-1 border-gray-300" />
+                                                        <div class="px-3 text-xs text-gray-500 sm:text-sm">or</div>
+                                                        <hr class="flex-1 border-gray-300" />
+                                                    </div>
+                                                    <div class="mt-4 mb-2 sm:mb-4">
+                                                        <div class="g-signin2" data-width="362" data-height="48"
+                                                            data-longtitle="true" data-theme="light"></div>
+                                                    </div>
                                                     <p class="text-xs text-gray-600 sm:text-sm">
                                                         Don't have an account? Create one
                                                         <a href="/sign-up"
@@ -171,6 +188,7 @@
                                 </div>
                             </div>
                         </div>
+
 
                         <!-- Footer -->
                         <!-- <%- include('footer.ejs') %> -->

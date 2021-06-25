@@ -62,7 +62,7 @@ exports.createUser = asyncHandler(async (req, res, next) => {
 });
 
 //@desc   Activate account
-//@route  POST /auth/verify/:token
+//@route  GET /auth/verify/:token
 //@access PUBLIC
 exports.activateAccount = asyncHandler(async (req, res, next) => {
   const token = req.params.token;
@@ -161,27 +161,17 @@ exports.forgetPassword = asyncHandler(async (req, res, next) => {
   });
 
   return res.render('preReset', {
-    title: 'Passave | Pre-reset',
+    title: 'Passave | Reset Password',
     code: 'green',
     message: 'Reset token has been sent to your email address!',
   });
 });
 
-// @desc   Reset password
-// @route  POST /auth/reset/:token
+// @desc Post forget paste reset token
+// @route POST /auth/reset
 // @access PUBLIC
-exports.resetPassword = asyncHandler(async (req, res, next) => {
-  const { password, passwordConfirmation } = req.body;
-
-  const reset_token = req.params.token;
-
-  if (password !== passwordConfirmation) {
-    res.render('reset', {
-      title: 'Passave | Reset Password',
-      code: 'red',
-      message: 'Passwords do not match!',
-    });
-  }
+exports.postForget = asyncHandler(async (req, res, next) => {
+  const { reset_token } = req.body;
 
   const user = await User.findOne({
     reset_token,
@@ -189,10 +179,40 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   }).select('reset_token reset_expires');
 
   if (!user) {
-    res.render('reset', {
+    return res.render('preReset', {
       title: 'Passave | Reset Password',
       code: 'red',
       message: 'Token is invalid or has expired!',
+    });
+  }
+
+  return res.render('reset', {
+    title: 'Passave | Reset Password',
+    code: 'green',
+    resetURL: `/auth/reset/${reset_token}`,
+    message: 'Activation token is verified. You can now reset your password.',
+  });
+});
+
+// @desc   Reset password
+// @route  POST /auth/reset/:token
+// @access PUBLIC
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+  const reset_token = req.params.token;
+
+  const user = await User.findOne({
+    reset_token,
+    reset_expires: { $gt: Date.now() },
+  }).select('reset_token reset_expires');
+
+  const { password, passwordConfirmation } = req.body;
+
+  if (password !== passwordConfirmation) {
+    return res.render('reset', {
+      title: 'Passave | Reset Password',
+      code: 'red',
+      resetURL: `/auth/reset/${reset_token}`,
+      message: 'Passwords do not match!',
     });
   }
 
@@ -203,18 +223,18 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   await user
     .save()
     .then(() => {
-      res.render('sign-in', {
+      return res.render('sign-in', {
         title: 'Passave | Sign in',
         code: 'green',
         message: 'Your password has been successfully reset!',
       });
     })
     .catch((err) => {
-      res.render('reset', {
-        title: 'Passave | Reset Password',
+      return res.render('forgot', {
+        title: 'Passave | Forgot Password',
         code: 'red',
         message:
-          'There has been an internal server error. Please try a bit later.',
+          'There has been an internal server error. Please try again later.',
       });
     });
 });

@@ -31,6 +31,11 @@
     <!-- CSS -->
     <!--------->
     <link rel="stylesheet" href="/static/styles.css">
+
+    <!--------------------------->
+    <!-- Profile Avatar Loader -->
+    <!--------------------------->
+    <script defer src="/static/avatar.js"></script>
 </head>
 
 <body>
@@ -38,13 +43,256 @@
 
     <div id="content">
 
-        <!-- Navigation -->
-        <%- include('navbar.ejs') %>
+        <!-- This example requires Tailwind CSS v2.0+ -->
+        <div>
+            <nav class="bg-gray-800">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex items-center justify-between h-16">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <a href="/">
+                                    <svg class="w-10 h-10" viewBox="0 0 200 238" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M10.406 0.0786643C6.79635 -0.398757 3.42574 1.43171 3.04745 1.94867C2.66917 2.46563 -0.605358 5.16728 0.0989089 10.0569V118.956V227.856L1.47054 230.336C5.0126 236.739 11.5239 239.341 18.053 236.965C20.9231 235.918 142.98 114.568 145.012 110.739C151.109 99.2429 137.032 86.4208 126.049 93.466C121.048 96.6745 103.169 118.058 99.2052 120.04C98.2141 121.031 93.2172 125.573 93.2172 125.573C88.139 132.618 67.4277 137.396 56.3913 134.071C51.5034 132.596 43.5847 128.565 43 127.253C42.9048 127.035 42.5778 126.857 42.2765 126.857C41.4975 126.857 36.0804 121.169 34.1934 118.371C33.3213 117.081 32.4888 115.904 32.3421 115.759C28.2827 111.73 25.4245 92.6713 27.8645 85.8996C28.2827 84.7382 28.6296 83.4897 28.6335 83.1271C28.6454 82.1183 31.7871 75.6894 33.5908 72.9843C35.8762 69.5558 34.6593 70.8083 71.3226 34.1098C89.7108 15.703 104.755 0.504742 104.755 0.334309C104.755 0.163876 83.5266 0.0350804 57.5806 0.0509347L10.406 0.0786643ZM96.1824 47.2826C52.8789 90.5944 53.7511 89.6055 53.8185 95.3487C53.9176 103.728 59.6677 108.849 68.284 108.232C73.166 107.881 73.4058 107.689 91.7821 89.3756C100.844 80.3427 108.432 72.9526 108.644 72.9526C108.854 72.9526 109.542 72.475 110.168 71.8904C111.476 70.6716 119.639 66.6109 120.779 66.6109C121.195 66.6109 122.57 66.2463 123.833 65.8004C132.737 62.6592 150.643 66.5594 157.811 73.2023C158.604 73.9376 159.351 74.5381 159.472 74.5381C159.928 74.5381 163.426 78.2955 163.426 78.783C163.426 79.0644 163.63 79.2943 163.882 79.2943C164.534 79.2943 168.381 85.3843 169.89 88.8069C174.696 99.7027 173.911 114.695 168.027 124.437C165.133 129.229 163.731 130.7 129.272 165.145C110.555 183.855 95.2409 199.303 95.2409 199.473C95.2409 201.748 121.619 197.999 132.449 194.333C141.73 191.191 160.728 181.007 160.728 179.176C162.261 179.176 179.481 161.657 179.733 160.064C180.472 159.675 186.117 151.171 187.348 148.789C199.711 124.869 202.882 102.519 197.437 77.7089C196.502 73.4381 193.959 65.2217 192.779 62.6474C189.037 54.4805 185.913 48.4955 184.7 47.1737C184.337 46.7773 184.04 46.2541 184.04 46.0083C184.04 45.5446 178.74 38.2497 176.25 35.2869C174.506 33.21 166.911 25.6297 164.738 23.7966C161.277 20.8774 156.604 17.4628 156.066 17.4628C155.753 17.4628 155.496 17.2845 155.494 17.0665C155.488 16.2936 146.021 11.0042 140.237 8.54283L136.503 6.95544L96.1824 47.2826Z"
+                                            fill="#ffffff" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="hidden md:block">
+                                <div class="links ml-10 flex items-baseline space-x-4">
+                                    <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                                    <a href="#dashboard"
+                                        class="panelControlBtn bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
 
+                                    <a href="#team"
+                                        class="panelControlBtn text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Team</a>
 
+                                    <a href="#witz"
+                                        class="panelControlBtn text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Projects</a>
 
-            <!-- Footer -->
-            <%- include('footer.ejs') %>
+                                    <a href="#profile"
+                                        class="panelControlBtn text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Profile</a>
+
+                                    <a href="#settings"
+                                        class="panelControlBtn text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Settings</a>
+                                </div>
+                            </div>
+                            <script>
+                                $(".links a").click(function () {
+                                    $(".panels").hide();
+                                    $(this.hash).fadeIn();
+                                });
+                            </script>
+                        </div>
+                        <div class="hidden md:block">
+                            <div class="ml-4 flex items-center md:ml-6">
+                                <button
+                                    class="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                                    <span class="sr-only">View notifications</span>
+                                    <!-- Heroicon name: outline/bell -->
+                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                    </svg>
+                                </button>
+
+                                <!-- Profile dropdown -->
+                                <div id="profile-dropdown" class="ml-3 relative">
+                                    <div>
+                                        <button type="button"
+                                            class="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                                            id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                                            <span class="sr-only">Open user menu</span>
+                                            <img id="profile-avatar" class="h-11 w-11 rounded-full" alt="P">
+                                        </button>
+                                    </div>
+
+                                    <!--
+                                    Dropdown menu, show/hide based on menu state.
+                     
+                                    Entering: "transition ease-out duration-100"
+                                        From: "transform opacity-0 scale-95"
+                                        To: "transform opacity-100 scale-100"
+                                    Leaving: "transition ease-in duration-75"
+                                        From: "transform opacity-100 scale-100"
+                                        To: "transform opacity-0 scale-95"
+                                    -->
+                                    <div id="dropdown-menu"
+                                        class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                        role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button"
+                                        tabindex="-1">
+                                        <!-- Active: "bg-gray-100", Not Active: "" -->
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
+
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
+
+                                        <form action="/auth/signout" method="POST">
+                                            <a onclick="this.parentNode.submit();"
+                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
+                                        </form>
+                                    </div>
+
+                                    <script>
+                                        $(document).ready(function () {
+                                            $('#profile-dropdown').click(function (event) {
+                                                event.stopPropagation();
+                                                $("#dropdown-menu").slideToggle("fast");
+                                            });
+                                            $("#dropdown-menu").on("click", function (event) {
+                                                event.stopPropagation();
+                                            });
+                                        });
+
+                                        $(document).on("click", function () {
+                                            $("#dropdown-menu").hide();
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="-mr-2 flex md:hidden">
+                            <!-- Mobile menu button -->
+                            <button type="button"
+                                class="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                                aria-controls="mobile-menu" aria-expanded="false">
+                                <span class="sr-only">Open main menu</span>
+                                <!--
+                Heroicon name: outline/menu
+  
+                Menu open: "hidden", Menu closed: "block"
+              -->
+                                <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                                <!--
+                Heroicon name: outline/x
+  
+                Menu open: "block", Menu closed: "hidden"
+              -->
+                                <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile menu, show/hide based on menu state. -->
+                <div class="md:hidden" id="mobile-menu">
+                    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                        <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                        <a href="#"
+                            class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+
+                        <a href="#"
+                            class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Team</a>
+
+                        <a href="#"
+                            class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Projects</a>
+
+                        <a href="#"
+                            class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Calendar</a>
+
+                        <a href="#"
+                            class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Reports</a>
+                    </div>
+                    <div class="pt-4 pb-3 border-t border-gray-700">
+                        <div class="flex items-center px-5">
+                            <div class="flex-shrink-0">
+                                <img src="" class="h-10 w-10 rounded-full" alt="P">
+                            </div>
+                            <div class="ml-3">
+                                <div class="text-base font-medium leading-none text-white">Tom Cook</div>
+                                <div class="text-sm font-medium leading-none text-gray-400">tom@example.com</div>
+                            </div>
+                            <button
+                                class="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                                <span class="sr-only">View notifications</span>
+                                <!-- Heroicon name: outline/bell -->
+                                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="mt-3 px-2 space-y-1">
+                            <a href="#"
+                                class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">Your
+                                Profile</a>
+
+                            <a href="#"
+                                class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">Settings</a>
+
+                            <a href="#"
+                                class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">Sign
+                                out</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <header class="bg-white shadow">
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    <h1 class="text-3xl font-bold text-gray-900">
+                        Dashboard
+                    </h1>
+                </div>
+            </header>
+            <main>
+                <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                    <!-- Replace with your content -->
+                    <div class="px-4 py-6 sm:px-0">
+                        <div class="border-4 border-dashed border-gray-200 rounded-lg h-96">
+                            <div
+                                class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+                                <div class="grid gap-8 lg:grid-cols-3 sm:max-w-sm sm:mx-auto lg:max-w-full">
+                                    <div class="p-8 bg-white border rounded shadow-sm">
+                                        <p class="mb-3 text-xs font-semibold tracking-wide uppercase">
+                                            <a href="/"
+                                                class="transition-colors duration-200 text-deep-purple-accent-400 hover:text-deep-purple-800"
+                                                aria-label="Category">weekend</a>
+                                            <span class="text-gray-600">— 1 Feb 2020</span>
+                                        </p>
+                                        <a href="/" aria-label="Article" title="Jingle Bells"
+                                            class="inline-block mb-3 text-2xl font-bold leading-5 text-black transition-colors duration-200 hover:text-deep-purple-accent-400">Jingle
+                                            Bells</a>
+                                        <p class="mb-5 text-gray-700">
+                                            Some pilots get picked and become television programs. Some don't, become
+                                            nothing.
+                                        </p>
+                                        <div class="flex items-center">
+                                            <a href="/" aria-label="Author" title="Author" class="mr-3">
+                                                <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260"
+                                                    alt="avatar"
+                                                    class="object-cover w-10 h-10 rounded-full shadow-sm" />
+                                            </a>
+                                            <div>
+                                                <a href="/" aria-label="Author" title="Author"
+                                                    class="font-semibold text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-400">Vasile
+                                                    Melinte</a>
+                                                <p class="text-sm font-medium leading-4 text-gray-600">Author</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /End replace -->
+                </div>
+            </main>
+        </div>
+
 
     </div>
 

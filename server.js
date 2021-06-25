@@ -5,8 +5,10 @@ const dbConf = require('./src/config/DBConf');
 const errorHandler = require('./src/middleware/errorHandler');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const { sendMail } = require('./src/utils/mailHandler');
 const path = require('path');
+const { protect } = require('./src/middleware/protect');
+const { PERMISSIONS } = require('./src/constants/permissions');
+const jwt = require('jsonwebtoken');
 
 // Set env variables
 require('dotenv').config();
@@ -44,16 +46,8 @@ app.get('/', (req, res, next) => {
   }
 });
 
-app.get('/dashboard', (req, res, next) => {
-  if (!req.cookies.token) {
-    res.redirect('/sign-in');
-  } else {
-    res.render('dashboard', { title: 'Passave | Dashboard' });
-  }
-});
-
-app.get('/preres', (req, res, next) => {
-  res.render('preReset', { title: 'Ebe' });
+app.get('/dashboard', protect(PERMISSIONS.ONLY_USERS), (req, res, next) => {
+  res.render('dashboard', { title: 'Passave | Dashboard' });
 });
 
 app.get('/sign-in', (req, res, next) => {
@@ -91,14 +85,6 @@ app.get('/forgot', (req, res, next) => {
 app.get('/404', (req, res, next) => {
   res.render('404', { title: 'Passave | 404 Error' });
 });
-
-// app.get('/postSignup', (req, res, next) => {
-//   res.render('postsignup.ejs', { title: 'Passave | Post Sign Up' });
-// });
-
-// app.get('/accountActivated', (req, res, next) => {
-//   res.render('accountActivated.ejs', { title: 'nese' });
-// });
 
 app.get('*', (req, res, next) => {
   res.redirect('/404');
