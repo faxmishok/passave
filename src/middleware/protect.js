@@ -1,27 +1,40 @@
-const asyncHandler = require("./async");
-const ErrorResponse = require("../utils/errorResponse");
-const jwt = require("jsonwebtoken");
+const asyncHandler = require('./async');
+const ErrorResponse = require('../utils/errorResponse');
+const jwt = require('jsonwebtoken');
 
 exports.protect = (permissions) => {
   return asyncHandler(async (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
-      return next(new ErrorResponse("Not authorized for this route!", 401));
+      return res.render('sign-in', {
+        title: 'Passave | Sign in',
+        code: 'red',
+        message:
+          'Not authorized for this route. You have to sign in to proceed.',
+      });
     }
 
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
-      if (!permissions.find((element) => element == decoded.status)) {
-        return next(
-          new ErrorResponse("You are not allowed for this request!", 401)
-        );
+      if (!permissions.find((element) => element === decoded.status)) {
+        return res.render('sign-in', {
+          title: 'Passave | Sign in',
+          code: 'red',
+          message:
+            'Your user status does not match to that of the allowed one. Try signing in again.',
+        });
       }
 
       req.user = decoded;
     } catch (error) {
-      return next(new ErrorResponse("Not authorized for this route!", 401));
+      return res.render('sign-in', {
+        title: 'Passave | Sign in',
+        code: 'red',
+        message:
+          'Error occured while processing your token. Please sign in again.',
+      });
     }
     return next();
   });

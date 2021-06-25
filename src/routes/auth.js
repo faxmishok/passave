@@ -5,6 +5,7 @@ const {
   loginUser,
   activateAccount,
   forgetPassword,
+  postForget,
   resetPassword,
   postEmailResend,
   postSignOut,
@@ -13,9 +14,10 @@ const {
 router.post('/register', createUser);
 router.post('/login', loginUser);
 router.get('/verify/:token', activateAccount);
+router.post('/forget', forgetPassword);
+router.post('/reset', postForget);
+router.post('/reset/:token', resetPassword);
 router.post('/resend', postEmailResend);
 router.post('/signout', postSignOut);
-router.post('/forget', forgetPassword);
-router.post('/reset/:token', resetPassword);
 
 module.exports = router;
