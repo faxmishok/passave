@@ -3,6 +3,10 @@
 // !
 
 // TODO Functionality:
+// ? Open live password websites in iframes and check real-time password authenticity
+// !
+
+// TODO Functionality:
 // ? Google Auth Login
 // !
 
@@ -21,3 +25,6 @@
 // TODO Functionality:
 // ? Face recognition powered
 // !
+
+// * ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+// ? Send index form data to /sign-up

@@ -31,14 +31,6 @@
     <!-- CSS -->
     <!--------->
     <link rel="stylesheet" href="/static/styles.css">
-
-    <!------------------->
-    <!-- Google OAuth2 -->
-    <!------------------->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id"
-        content="831815436231-83tbapi97dqnuijmb47324lm9dhk3nud.apps.googleusercontent.com">
-
 </head>
 
 <body>
@@ -173,9 +165,15 @@
                                                         <hr class="flex-1 border-gray-300" />
                                                     </div>
                                                     <div class="mt-4 mb-2 sm:mb-4">
-                                                        <div class="g-signin2" data-width="362" data-height="48"
-                                                            data-longtitle="true" data-theme="light"></div>
+                                                        <a href="" class="login-with-google-btn" id="oauth2signin">
+                                                            Sign in with Google
+                                                        </a>
                                                     </div>
+                                                    <script>
+                                                        $.get('/auth/google/url', function (data) {
+                                                            $('#oauth2signin').attr('href', data);
+                                                        });
+                                                    </script>
                                                     <p class="text-xs text-gray-600 sm:text-sm">
                                                         Don't have an account? Create one
                                                         <a href="/sign-up"
