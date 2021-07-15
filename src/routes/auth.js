@@ -9,6 +9,8 @@ const {
   resetPassword,
   postEmailResend,
   postSignOut,
+  getAuthURL,
+  getGoogleUser,
 } = require('../controllers/authController');
 
 router.post('/register', createUser);
@@ -19,5 +21,8 @@ router.post('/reset', postForget);
 router.post('/reset/:token', resetPassword);
 router.post('/resend', postEmailResend);
 router.post('/signout', postSignOut);
+
+router.get('/google/url', getAuthURL);
+router.get('/google', getGoogleUser);
 
 module.exports = router;

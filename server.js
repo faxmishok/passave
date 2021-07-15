@@ -2,13 +2,11 @@ const express = require('express');
 const app = express();
 const routeConf = require('./src/config/RouteConf');
 const dbConf = require('./src/config/DBConf');
+const renderConf = require('./src/config/RenderConf');
 const errorHandler = require('./src/middleware/errorHandler');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const { protect } = require('./src/middleware/protect');
-const { PERMISSIONS } = require('./src/constants/permissions');
-const jwt = require('jsonwebtoken');
 
 // Set env variables
 require('dotenv').config();
@@ -37,58 +35,8 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Set views for routes
-app.get('/', (req, res, next) => {
-  if (req.cookies.token) {
-    res.redirect('/dashboard');
-  } else {
-    res.render('index', { title: 'Passave | Password Manager' });
-  }
-});
-
-app.get('/dashboard', protect(PERMISSIONS.ONLY_USERS), (req, res, next) => {
-  res.render('dashboard', { title: 'Passave | Dashboard' });
-});
-
-app.get('/sign-in', (req, res, next) => {
-  if (req.cookies.token) {
-    res.redirect('/dashboard');
-  } else {
-    res.render('sign-in', { title: 'Passave | Sign In' });
-  }
-});
-
-app.get('/sign-up', (req, res, next) => {
-  if (req.cookies.token) {
-    res.redirect('/dashboard');
-  } else {
-    res.render('sign-up', { title: 'Passave | Sign Up' });
-  }
-});
-
-app.get('/faq', (req, res, next) => {
-  res.render('faq', { title: 'Passave | F.A.Q' });
-});
-
-app.get('/terms', (req, res, next) => {
-  res.render('terms', { title: 'Passave | Terms & Conditions' });
-});
-
-app.get('/forgot', (req, res, next) => {
-  if (req.cookies.token) {
-    res.redirect('/dashboard');
-  } else {
-    res.render('forgot', { title: 'Passave | Forgot Password?' });
-  }
-});
-
-app.get('/404', (req, res, next) => {
-  res.render('404', { title: 'Passave | 404 Error' });
-});
-
-app.get('*', (req, res, next) => {
-  res.redirect('/404');
-});
+// Render views
+renderConf(app);
 
 // Set custom error middleware
 app.use(errorHandler);

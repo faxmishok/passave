@@ -3,6 +3,8 @@ const asyncHandler = require('../middleware/async');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const { sendMail } = require('../utils/mailHandler');
+const querystring = require('querystring');
+const axios = require('axios');
 
 //@desc   registration for User
 //@route  POST /auth/register
@@ -274,4 +276,115 @@ exports.postSignOut = asyncHandler(async (req, res, next) => {
     code: 'green',
     message: 'Signed out successfully!',
   });
+});
+
+//@desc   Get login URL
+//@route  POST /auth/google/url
+//@access PUBLIC
+exports.getAuthURL = asyncHandler(async (req, res, next) => {
+  function getGoogleAuthURL() {
+    const redirectURI = 'auth/google';
+    const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
+
+    const options = {
+      redirect_uri: `${process.env.SERVER_URL}/${redirectURI}`,
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      access_type: 'offline',
+      response_type: 'code',
+      prompt: 'consent',
+      scope: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email',
+      ].join(' '),
+    };
+
+    return `${rootUrl}?${querystring.stringify(options)}`;
+  }
+
+  return res.send(getGoogleAuthURL());
+});
+
+function getTokens(code, obj) {
+  const url = 'https://oauth2.googleapis.com/token';
+  const values = {
+    code,
+    client_id: obj.clientId,
+    client_secret: obj.clientSecret,
+    redirect_uri: obj.redirectUri,
+    grant_type: 'authorization_code',
+  };
+
+  return axios
+    .post(url, querystring.stringify(values), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    })
+    .then(function (res) {
+      return res.data;
+    })
+    .catch(function (error) {
+      console.error('Failed to fetch auth tokens');
+      throw new Error(error.message);
+    });
+}
+
+//@desc   Get the user from Google
+//@route  GET /auth/google
+//@access PUBLIC
+exports.getGoogleUser = asyncHandler(async (req, res, next) => {
+  const code = req.query.code;
+
+  const { id_token, access_token } = await getTokens(code, {
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    redirectUri: `${process.env.SERVER_URL}/auth/google`,
+  });
+
+  const googleUser = await axios
+    .get(
+      `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
+      {
+        headers: {
+          Authorization: `Bearer ${id_token}`,
+        },
+      }
+    )
+    .then((res) => res.data)
+    .catch((error) => {
+      res.render('sign-in', {
+        title: 'Passave | Sign in',
+        code: 'red',
+        message: `Error: ${error}`,
+      });
+    });
+
+  const email = googleUser.email;
+
+  const user = await User.findOne({ email })
+    .then()
+    .catch((err) => {
+      res.render('/sign-in', {
+        title: 'Passave | Sign in',
+        code: 'red',
+        message: `Error: ${err}`,
+      });
+    });
+
+  if (!user) {
+    return res.render('sign-in', {
+      title: 'Passave | Sign in',
+      code: 'red',
+      message: `You haven't registered yet! Try signing up first.`,
+    });
+  }
+
+  const token = await user.getSignedJWTToken();
+
+  return res
+    .cookie('token', token, {
+      expires: new Date(Date.now() + 3600000),
+      httpOnly: true,
+    })
+    .redirect('/dashboard');
 });

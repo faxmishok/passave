@@ -157,6 +157,22 @@
                                                 class="text-gray-600 font-semibold underline transition-colors duration-300 hover:text-deep-purple-accent-400">here</a>.
                                         </p>
                                     </form>
+                                    <script>
+                                        function getUrlVars() {
+                                            var vars = {};
+                                            var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+                                                vars[key] = value;
+                                            });
+                                            return vars;
+                                        }
+
+                                        const vars = getUrlVars();
+
+                                        $('#first_name').attr('value', decodeURIComponent(vars.first_name));
+                                        $('#last_name').attr('value', decodeURIComponent(vars.last_name));
+                                        $('#email').attr('value', decodeURIComponent(vars.email));
+                                        $('#username').attr('value', decodeURIComponent(vars.username));
+                                    </script>
                                 </div>
                             </div>
 

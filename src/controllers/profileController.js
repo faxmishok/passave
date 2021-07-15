@@ -1,9 +1,7 @@
-const express = require('express');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const User = require('../models/user');
 const Save = require('../models/save');
-const bcrypt = require('bcryptjs');
 
 //@desc User's dashboard view / DB
 //@route GET /profile/dashboard
