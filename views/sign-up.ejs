@@ -167,11 +167,10 @@
                                         }
 
                                         const vars = getUrlVars();
-
-                                        $('#first_name').attr('value', decodeURIComponent(vars.first_name));
-                                        $('#last_name').attr('value', decodeURIComponent(vars.last_name));
-                                        $('#email').attr('value', decodeURIComponent(vars.email));
-                                        $('#username').attr('value', decodeURIComponent(vars.username));
+                                        vars.first_name ? $('#first_name').attr('value', decodeURIComponent(vars.first_name)) : null;
+                                        vars.last_name ? $('#last_name').attr('value', decodeURIComponent(vars.last_name)) : null;
+                                        vars.email ? $('#email').attr('value', decodeURIComponent(vars.email)) : null;
+                                        vars.username ? $('#username').attr('value', decodeURIComponent(vars.username)) : null;
                                     </script>
                                 </div>
                             </div>
