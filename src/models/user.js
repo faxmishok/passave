@@ -52,6 +52,10 @@ const userSchema = mongoose.Schema({
     required: [true, 'E-mail address is required!'],
     unique: [true, 'E-mail address is already registered!'],
   },
+  secret: {
+    type: String,
+    unique: [true, 'This secret has already generated for another user!'],
+  },
   status: {
     type: String,
     enum: ['PENDING', 'VERIFIED'],

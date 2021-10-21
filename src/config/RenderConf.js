@@ -47,6 +47,12 @@ const renderConf = (app) => {
     }
   });
 
+  app.get('/postSignup', (req, res, next) => {
+    res.render('postSignup', {
+      title: 'Passave | Post Sign up',
+    });
+  });
+
   app.get('/404', (req, res, next) => {
     res.render('404', { title: 'Passave | 404 Error' });
   });
