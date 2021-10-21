@@ -7,10 +7,6 @@
 // !
 
 // TODO Functionality:
-// ? Google Auth Login
-// !
-
-// TODO Functionality:
 // ? Suggest random strong password in every new save
 // !
 
@@ -25,6 +21,9 @@
 // TODO Functionality:
 // ? Face recognition powered
 // !
+
+// * ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+// ? Google Auth Login
 
 // * ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 // ? Send index form data to /sign-up

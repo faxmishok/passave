@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const { sendMail } = require('../utils/mailHandler');
 const querystring = require('querystring');
 const axios = require('axios');
+const authenticator = require('../middleware/authenticator');
 
 //@desc   registration for User
 //@route  POST /auth/register
@@ -27,6 +28,27 @@ exports.createUser = asyncHandler(async (req, res, next) => {
     });
   }
 
+  const secretObj = authenticator.newSecret(username);
+  await authenticator
+    .getQRCode(secretObj.otpauth_url)
+    .then((url) => {
+      QRToDataUrl = url;
+    })
+    .catch((err) => {
+      console.error(err);
+      QRToDataUrl = undefined;
+    });
+
+  if (QRToDataUrl === undefined) {
+    return res.render('sign-up', {
+      success: false,
+      title: 'Passave | Sign up',
+      message: `Error generating the secret. Please try again later: ${QRToDataUrl}`,
+    });
+  }
+
+  const secret = secretObj.base32;
+
   const newUser = new User({
     first_name,
     last_name,
@@ -34,6 +56,7 @@ exports.createUser = asyncHandler(async (req, res, next) => {
     password,
     passwordConfirmation,
     email,
+    secret,
   });
 
   var successFlag;
@@ -59,7 +82,10 @@ exports.createUser = asyncHandler(async (req, res, next) => {
       options: { username, id: newUser._id, token },
     });
 
-    return await res.render('postSignup', { title: 'Passave | Post Sign-up' });
+    return res.render('postSignup', {
+      title: 'Passave | Post Sign-up',
+      dataURL: QRToDataUrl,
+    });
   }
 });
 
@@ -274,7 +300,7 @@ exports.postSignOut = asyncHandler(async (req, res, next) => {
   res.clearCookie('token').render('sign-in', {
     title: 'Passave | Sign in',
     code: 'green',
-    message: 'Signed out successfully!',
+    message: 'You signed out of your account.',
   });
 });
 

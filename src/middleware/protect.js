@@ -1,5 +1,4 @@
 const asyncHandler = require('./async');
-const ErrorResponse = require('../utils/errorResponse');
 const jwt = require('jsonwebtoken');
 
 exports.protect = (permissions) => {
