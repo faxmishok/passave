@@ -118,10 +118,10 @@ exports.activateAccount = asyncHandler(async (req, res, next) => {
 //@route  POST /auth/login
 //@access PUBLIC
 exports.loginUser = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, secret_token } = req.body;
 
   const user = await User.findOne({ email }).select(
-    'email password username status'
+    'email password username status secret'
   );
 
   if (!user) {
@@ -132,14 +132,6 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
     });
   }
 
-  if (user.status === 'PENDING') {
-    return res.render('sign-in', {
-      title: 'Passave | Sign in',
-      code: 'red',
-      message: 'Please verify your account!',
-    });
-  }
-
   const isMatch = user.isMatchedPassword(password);
 
   if (!isMatch) {
@@ -147,6 +139,31 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
       title: 'Passave | Sign in',
       code: 'red',
       message: 'Password is incorrect!',
+    });
+  }
+
+  /* here verify */
+  const user_secret = user.secret;
+  const tokenValidates = await authenticator.validateUser({
+    secret: user_secret,
+    encoding: 'base32',
+    token: secret_token,
+    window: 1,
+  });
+
+  if (!tokenValidates) {
+    return res.render('sign-in', {
+      title: 'Passave | Sign in',
+      code: 'red',
+      message: `Entered token does not match to the secret or it has expired.`,
+    });
+  }
+
+  if (user.status === 'PENDING') {
+    return res.render('sign-in', {
+      title: 'Passave | Sign in',
+      code: 'red',
+      message: 'Please verify your account via e-mail.',
     });
   }
 
@@ -401,7 +418,15 @@ exports.getGoogleUser = asyncHandler(async (req, res, next) => {
     return res.render('sign-in', {
       title: 'Passave | Sign in',
       code: 'red',
-      message: `You haven't registered yet! Try signing up first.`,
+      message: `Provided email is not registered.`,
+    });
+  }
+
+  if (user.status === 'PENDING') {
+    return res.render('sign-in', {
+      title: 'Passave | Sign in',
+      code: 'red',
+      message: 'Please verify your account via e-mail.',
     });
   }
 

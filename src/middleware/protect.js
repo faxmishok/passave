@@ -22,7 +22,7 @@ exports.protect = (permissions) => {
           title: 'Passave | Sign in',
           code: 'red',
           message:
-            'Your user status does not match to that of the allowed one. Try signing in again.',
+            'Your user status does not match to any of the allowed. Please make sure you have verified your e-mail or try again later.',
         });
       }
 
