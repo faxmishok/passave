@@ -16,3 +16,7 @@ exports.getQRCode = asyncHandler(async (OTPAuthUrl) => {
     return err;
   }
 });
+
+exports.validateUser = asyncHandler(async (params) => {
+  return speakeasy.totp.verify(params);
+});

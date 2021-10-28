@@ -133,19 +133,30 @@
                                                 </h3>
                                                 <form action="/auth/login" method="POST">
                                                     <div class="mb-1 sm:mb-2">
-                                                        <label for="name"
+                                                        <label for="email"
                                                             class="inline-block mb-1 font-medium">E-mail</label>
                                                         <input placeholder="krazyhacker88@mail.ru" required=""
                                                             type="email"
                                                             class="flex-grow w-full h-12 px-4 mb-2 transition duration-200 bg-white border border-gray-300 rounded shadow-sm appearance-none focus:border-deep-purple-accent-400 focus:outline-none focus:shadow-outline"
                                                             id="email" name="email" />
                                                     </div>
-                                                    <div class="mb-1 sm:mb-2 flex flex-col">
-                                                        <label for="email" class="inline-block mb-1 font-medium">Master
+
+                                                    <div class="mb-1 sm:mb-2">
+                                                        <label for="password"
+                                                            class="inline-block mb-1 font-medium">Master
                                                             Password</label>
                                                         <input placeholder="*********" required="" type="password"
                                                             class="flex-grow w-full h-12 px-4 mb-2 transition duration-200 bg-white border border-gray-300 rounded shadow-sm appearance-none focus:border-deep-purple-accent-400 focus:outline-none focus:shadow-outline"
-                                                            id="password" name="password" />
+                                                            id="email" name="password" />
+                                                    </div>
+
+                                                    <div class="mb-1 sm:mb-2 flex flex-col">
+                                                        <label for="secret_token"
+                                                            class="inline-block mb-1 font-medium">Secret
+                                                            Key</label>
+                                                        <input placeholder="012345" required="" type="number"
+                                                            class="flex-grow w-full h-12 px-4 mb-2 transition duration-200 bg-white border border-gray-300 rounded shadow-sm appearance-none focus:border-deep-purple-accent-400 focus:outline-none focus:shadow-outline"
+                                                            id="secret_token" name="secret_token" />
                                                         <p class="text-xs self-end text-gray-600 sm:text-sm">
                                                             <a href="/forgot"
                                                                 class="text-gray-600  underline transition-colors duration-300 hover:text-deep-purple-accent-400">Forgot
