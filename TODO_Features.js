@@ -11,16 +11,11 @@
 // !
 
 // TODO Functionality:
-// ? 2FA Google Auth
-// !
-
-// TODO Functionality:
-// ? Socket.io Chatting
-// !
-
-// TODO Functionality:
 // ? Face recognition powered
 // !
+
+// * ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+// ? 2FA Login
 
 // * ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 // ? Google Auth Login
