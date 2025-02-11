@@ -7,8 +7,11 @@ exports.sendMail = ({ mailTo, mailType, options }) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
+        type: 'OAuth2',
         user: process.env.EMAIL,
-        pass: process.env.PASSWORD,
+        clientId: process.env.EMAILER_CLIENT_ID,
+        clientSecret: process.env.EMAILER_CLIENT_SECRET,
+        refreshToken: process.env.EMAILER_REFRESH_TOKEN,
       },
     });
     transporter.sendMail(mailOptions);
