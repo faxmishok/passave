@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const dbConf = async () => {
   await mongoose
-    .connect(process.env.MONGO_LOCAL_URI, {
+    .connect(process.env.MONGO_ATLAS_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
