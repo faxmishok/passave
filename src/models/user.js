@@ -36,7 +36,8 @@ const userSchema = mongoose.Schema({
           password
         );
       },
-      message: (props) => `Password "${props.value}" is not strong enough!`,
+      message: (props) =>
+        `Password "${props.value}" is not strong enough! Type at least a special character, an uppercase letter and a number.`,
     },
   },
   email: {
